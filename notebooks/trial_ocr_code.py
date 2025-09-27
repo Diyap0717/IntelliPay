@@ -1,11 +1,15 @@
-# trial_ocr_code.py
-import os
+import streamlit as st
+import json
+from google.oauth2 import service_account
 from google.cloud import vision
 import io
 
-# Initialize Google Vision client
-credential_path = r"C:\Users\dpate331\Downloads\PersonalProjects\OCR_Project\Google_Vision\ocrpro-safe-key.json"
-client = vision.ImageAnnotatorClient.from_service_account_file(credential_path)
+# Load the credentials from Streamlit Secrets
+creds_dict = json.loads(st.secrets["google"]["credentials"])
+credentials = service_account.Credentials.from_service_account_info(creds_dict)
+
+# Create the Vision API client with credentials
+client = vision.ImageAnnotatorClient(credentials=credentials)
 
 
 def extract_text_from_image(image_path: str) -> str:
